@@ -63,19 +63,21 @@ def load_data():
     try:
         conn = st.connection("gsheets", type=GSheetsConnection)
         df = conn.read(spreadsheet=SPREADSHEET_URL)
-        return df, conn
+        return df
     except Exception as e:
         st.error(f"Error connecting to Google Sheets. Did you set up `.streamlit/secrets.toml` correctly? Error details: {e}")
-        return pd.DataFrame(), None
+        return pd.DataFrame()
 
 def main():
     st.title("🌍 Europe Job Application Tracker")
     
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    
     # Load Data
     with st.spinner("Fetching data from Google Sheets..."):
-        df, conn = load_data()
+        df = load_data()
         
-    if df.empty or conn is None:
+    if df.empty:
         st.warning("⚠️ Waiting for valid data connection or spreadsheet is empty.")
         st.info("Make sure you have populated `.streamlit/secrets.toml` with your Service Account JSON.")
         return
