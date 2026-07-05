@@ -124,7 +124,6 @@ def main():
             with col_a:
                 country = st.text_input("Country*")
                 company = st.text_input("Company*")
-                run_days = st.number_input("Run Days", min_value=0, value=0)
             with col_b:
                 app_date = st.date_input("Application Date", value=datetime.today())
                 status = st.selectbox("Status", ["CV Sent", "Interview", "Rejected", "Offer", "Other"])
@@ -135,12 +134,13 @@ def main():
             
             if submit_btn:
                 if country and company:
+                    calculated_run_days = (datetime.today().date() - app_date).days
                     new_row = pd.DataFrame([{
                         "Country": country,
                         "Company": company,
                         "Job Description": job_desc,
                         "Application Date": app_date.strftime("%m/%d/%Y"),
-                        "Run Days": run_days,
+                        "Run Days": calculated_run_days,
                         "Status": status,
                         "URL": url
                     }])
